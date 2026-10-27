@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f2f6ee">
 <meta name="description" content="深源·东厦100 商业合作邀请 | 汕头城市商业新地标，诚邀品牌共赢">
 
-<!-- ====== 微信分享卡片（保持原配置：根目录 img.jpg，600x600）====== -->
+<!-- ====== 分享卡片：og 标签仅对 Twitter/FB 等国外平台生效；微信走下方「隐藏首图 + WeixinJSBridge」====== -->
 <meta property="og:title" content="深源·东厦100 · 商业合作">
 <meta property="og:description" content="深源·东厦100 商业合作邀请 | 汕头城市商业新地标，诚邀品牌共赢">
 <meta property="og:type" content="website">
@@ -129,6 +129,31 @@
 </style>
 </head>
 <body>
+
+<!-- 微信默认分享抓取规则：取页面中第一张尺寸 ≥300x300 的图片作缩略图。
+     必须放在 body 最前面、保持真实尺寸（不能 display:none 或宽高为 0），用绝对定位移出可视区。 -->
+<img src="img.jpg" alt="" width="600" height="600"
+     style="position:absolute;left:-9999px;top:-9999px;width:600px;height:600px;">
+
+<!-- 微信内置浏览器分享挂钩（无需公众号即可自定义卡片标题/描述/图片）。
+     若后续有认证公众号，可升级为 JS-SDK wx.updateAppMessageShareData，需后端签名。 -->
+<script>
+(function(){
+  var shareData = {
+    title: '深源·东厦100 · 商业合作',
+    desc: '汕头城市商业新地标，诚邀品牌共赢',
+    link: location.href.split('#')[0],
+    imgUrl: 'https://dongxia100.github.io/dongxia100/img.jpg'
+  };
+  function hook(bridge){
+    bridge.on('menu:share:appmessage', function(){ bridge.invoke('sendAppMessage', shareData); });
+    bridge.on('menu:share:timeline',    function(){ bridge.invoke('shareTimeline', shareData); });
+  }
+  if (window.WeixinJSBridge) hook(window.WeixinJSBridge);
+  else document.addEventListener('WeixinJSBridgeReady', function(){ hook(window.WeixinJSBridge); }, false);
+})();
+</script>
+
 <div class="dots" id="dots" aria-hidden="true"></div>
 <div class="wrap" id="wrap">
 
